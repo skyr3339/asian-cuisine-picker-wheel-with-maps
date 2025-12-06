@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Food Menu Spinner</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Tesseract.js CDN -->
+  <script src="https://unpkg.com/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="header-row">
+        <div class="header-text">
+          <h1>Food Menu Spinner</h1>
+          <p class="subtitle">
+            Snap a menu, clean the list, and let the wheel decide what to eat.
+          </p>
+        </div>
+        <button id="themeToggle" class="ghost-btn theme-toggle" type="button">
+          🌙 Dark
+        </button>
+      </div>
+    </header>
+
+    <!-- Step 1: Upload & OCR -->
+    <section class="section-box">
+      <div class="step-label">Step 1</div>
+      <h2>Upload a menu photo</h2>
+      <p class="section-desc">
+        Take a clear photo of the menu and we’ll extract the food names for you.
+      </p>
+
+      <div class="upload-box">
+        <label for="menuImageInput" class="upload-label">
+          <span class="upload-icon">📷</span>
+          <span>Select an image or use your camera</span>
+        </label>
+        <input id="menuImageInput" type="file" accept="image/*" capture="environment" />
+
+        <div id="imagePreviewWrapper" class="image-preview-wrapper">
+          <img id="menuImagePreview" alt="Menu preview" />
+        </div>
+
+        <button id="extractTextBtn" class="primary-btn">Extract text from image</button>
+        <div id="ocrStatus" class="status-text"></div>
+      </div>
+    </section>
+
+    <!-- Step 2: Edit food list -->
+    <section class="section-box">
+      <div class="step-label">Step 2</div>
+      <h2>Review & edit your food list</h2>
+      <p class="section-desc">
+        Remove prices or noise, rename items, or add your own dishes.
+      </p>
+
+      <ul id="foodList" class="food-list"></ul>
+
+      <div id="addItemWrapper" class="add-item-row">
+        <input
+          id="newItemInput"
+          type="text"
+          placeholder="Add a food item manually (e.g. Spicy Ramen)"
+        />
+        <button id="addItemBtn" class="secondary-btn">Add</button>
+      </div>
+
+      <div class="section-actions">
+        <button id="confirmListBtn" class="primary-btn">Confirm list</button>
+        <button id="resetBtn" type="button" class="ghost-btn">Reset all</button>
+      </div>
+
+      <p class="hint-text">
+        Tip: Your last confirmed list is remembered on this device.
+      </p>
+    </section>
+
+    <!-- Step 3: Spin wheel -->
+    <section class="section-box">
+      <div class="step-label">Step 3</div>
+      <h2>Spin the wheel</h2>
+      <p class="section-desc">
+        Each slice is one food item. Hit spin and let fate choose your meal.
+      </p>
+
+      <div class="wheel-wrapper">
+        <canvas id="wheelCanvas" width="520" height="560"></canvas>
+      </div>
+
+      <button id="spinBtn" class="spin-btn">Spin!</button>
+
+      <div id="resultText" class="result-text"></div>
+    </section>
+
+    <footer class="app-footer">
+      <p>Built for indecisive food lovers 🍽️</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

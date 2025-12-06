@@ -1,0 +1,471 @@
+/* ===== Base layout ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f3ef;
+  color: #222;
+}
+
+.app-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 40px;
+}
+
+/* ===== Header ===== */
+.app-header {
+  margin-bottom: 24px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.app-header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  letter-spacing: 0.03em;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  font-size: 13px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+/* ===== Sections / cards ===== */
+.section-box {
+  background: #ffffff;
+  padding: 24px 20px 28px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+  margin-bottom: 20px;
+}
+
+.section-box h2 {
+  margin: 4px 0 8px;
+  font-size: 20px;
+}
+
+.section-desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.step-label {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f1f4fb;
+  color: #39558f;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+/* ===== Buttons ===== */
+button {
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 9px 18px;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.08s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.primary-btn {
+  background: #143d6b;
+  color: #ffffff;
+}
+
+.primary-btn:hover {
+  background: #0f3055;
+}
+
+.secondary-btn {
+  background: #eef2fb;
+  color: #143d6b;
+}
+
+.secondary-btn:hover {
+  background: #e1e7fa;
+}
+
+.ghost-btn {
+  background: transparent;
+  color: #888;
+  border: 1px solid #ddd;
+}
+
+.ghost-btn:hover {
+  border-color: #bbb;
+  color: #555;
+}
+
+/* Spin button: prominent */
+.spin-btn {
+  margin: 8px auto 0;
+  display: block;
+  background: #e0b043;
+  color: #2a1b07;
+  font-weight: 600;
+  padding: 12px 32px;
+  font-size: 18px;
+}
+
+.spin-btn:hover {
+  background: #f3cf66;
+}
+
+/* ===== Upload area ===== */
+.upload-box {
+  border-radius: 14px;
+  background: #faf6ea;
+  padding: 16px 16px 18px;
+}
+
+.upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px dashed #e0b043;
+  background: #fffaf0;
+  color: #9a7a32;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.upload-icon {
+  font-size: 18px;
+}
+
+/* Hide native file input */
+#menuImageInput {
+  display: none;
+}
+
+.image-preview-wrapper {
+  margin-bottom: 12px;
+}
+
+#menuImagePreview {
+  max-width: 100%;
+  max-height: 260px;
+  display: none;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  object-fit: contain;
+}
+
+.status-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #777;
+}
+
+/* ===== Food list ===== */
+.food-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+  background: #fcfbf9;
+}
+
+.food-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #f1ede6;
+}
+
+.food-list li:last-child {
+  border-bottom: none;
+}
+
+.food-list li span {
+  flex: 1;
+  margin-right: 8px;
+}
+
+/* Edit / delete buttons */
+.food-list li button {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.food-list li button:nth-of-type(1) {
+  background: #eef2fb;
+  color: #143d6b;
+}
+
+.food-list li button:nth-of-type(1):hover {
+  background: #dde4fb;
+}
+
+.food-list li button:nth-of-type(2) {
+  background: #f9e0e0;
+  color: #b53a3a;
+}
+
+.food-list li button:nth-of-type(2):hover {
+  background: #f3c9c9;
+}
+
+/* ===== Add item row ===== */
+.add-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.add-item-row input {
+  flex: 1;
+  padding: 9px 10px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.add-item-row input:focus {
+  outline: none;
+  border-color: #143d6b;
+  box-shadow: 0 0 0 2px rgba(20, 61, 107, 0.15);
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.hint-text {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #888;
+}
+
+/* ===== Wheel area ===== */
+.wheel-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0 12px;
+}
+
+#wheelCanvas {
+  display: block;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* no hover float effect */
+#wheelCanvas:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===== Result text ===== */
+.result-text {
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.result-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Footer ===== */
+.app-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== Dark mode ===== */
+body.dark-mode {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark-mode .app-header h1 {
+  color: #e5e7eb;
+}
+
+body.dark-mode .subtitle {
+  color: #9ca3af;
+}
+
+body.dark-mode .section-box {
+  background: #020617;
+  border: 1px solid #111827;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .section-desc {
+  color: #9ca3af;
+}
+
+body.dark-mode .step-label {
+  background: #0f172a;
+  color: #93c5fd;
+}
+
+body.dark-mode .upload-box {
+  background: #020617;
+  border: 1px solid #111827;
+}
+
+body.dark-mode .upload-label {
+  background: #020617;
+  border-color: #fbbf24;
+  color: #facc6b;
+}
+
+body.dark-mode .status-text {
+  color: #9ca3af;
+}
+
+body.dark-mode .food-list {
+  background: #020617;
+  border-color: #111827;
+}
+
+body.dark-mode .food-list li {
+  border-bottom-color: #111827;
+  color: #e5e7eb;
+}
+
+body.dark-mode .add-item-row input {
+  background: #020617;
+  border-color: #111827;
+  color: #e5e7eb;
+}
+
+body.dark-mode .hint-text {
+  color: #6b7280;
+}
+
+body.dark-mode .primary-btn {
+  background: #2563eb;
+}
+
+body.dark-mode .primary-btn:hover {
+  background: #1d4ed8;
+}
+
+body.dark-mode .secondary-btn {
+  background: #0b1120;
+  color: #bfdbfe;
+}
+
+body.dark-mode .secondary-btn:hover {
+  background: #020617;
+}
+
+body.dark-mode .ghost-btn {
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+body.dark-mode .ghost-btn:hover {
+  border-color: #6b7280;
+  color: #e5e7eb;
+}
+
+body.dark-mode .spin-btn {
+  background: #facc15;
+  color: #1f2937;
+}
+
+body.dark-mode .spin-btn:hover {
+  background: #fde047;
+}
+
+body.dark-mode .result-text {
+  color: #f9fafb;
+}
+
+body.dark-mode .app-footer {
+  color: #6b7280;
+}
+
+/* Theme toggle label colors in dark mode */
+body.dark-mode .theme-toggle {
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .app-header h1 {
+    font-size: 26px;
+  }
+
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .theme-toggle {
+    align-self: flex-end;
+  }
+
+  .section-box {
+    padding: 18px 14px 22px;
+  }
+
+  .spin-btn {
+    width: 100%;
+  }
+
+  .food-list {
+    max-height: 220px;
+  }
+}
