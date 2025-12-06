@@ -1,8 +1,5 @@
 // ==== Element references ====
-const menuImageInput = document.getElementById('menuImageInput');
-const menuImagePreview = document.getElementById('menuImagePreview');
-const extractTextBtn = document.getElementById('extractTextBtn');
-const ocrStatus = document.getElementById('ocrStatus');
+const cuisineSelect = document.getElementById('cuisineSelect');
 
 const foodListElement = document.getElementById('foodList');
 const newItemInput = document.getElementById('newItemInput');
@@ -14,17 +11,172 @@ const wheelCanvas = document.getElementById('wheelCanvas');
 const ctx = wheelCanvas.getContext('2d');
 const spinBtn = document.getElementById('spinBtn');
 const resultText = document.getElementById('resultText');
+const mapsLinkContainer = document.getElementById('mapsLinkContainer');
 
 const themeToggle = document.getElementById('themeToggle');
+const surpriseCuisineBtn = document.getElementById('surpriseCuisineBtn');
 
 // ==== State ====
-let uploadedImageFile = null;
-let foodItems = []; // array of strings
+let foodItems = []; // array of dish names
 let currentAngle = 0;
 let isSpinning = false;
 
 const STORAGE_KEY = 'menuWheelFoodItems';
 const THEME_KEY = 'menuWheelTheme';
+
+// ==== Cuisine data ====
+const CUISINES = {
+  Japanese: [
+    'Sushi Platter',
+    'Tonkotsu Ramen',
+    'Chicken Katsu',
+    'Tempura Udon',
+    'Gyudon Beef Bowl',
+    'Okonomiyaki',
+    'Salmon Don',
+    'Karaage Fried Chicken'
+  ],
+  Chinese: [
+    'Kung Pao Chicken',
+    'Sweet & Sour Pork',
+    'Yangzhou Fried Rice',
+    'Mapo Tofu',
+    'Beef Chow Fun',
+    'Steamed Fish with Soy',
+    'Xiao Long Bao',
+    'Char Siu Rice'
+  ],
+  Korean: [
+    'Bibimbap',
+    'Kimchi Jjigae',
+    'Korean Fried Chicken',
+    'Bulgogi Beef',
+    'Tteokbokki',
+    'Jajangmyeon',
+    'Samgyeopsal',
+    'Sundubu Jjigae'
+  ],
+  Taiwanese: [
+    'Beef Noodle Soup',
+    'Braised Pork Rice',
+    'Oyster Omelette',
+    'Chicken Cutlet Rice',
+    'Lu Rou Fan',
+    'Popcorn Chicken',
+    'Stinky Tofu',
+    'Scallion Pancake'
+  ],
+  Thai: [
+    'Pad Thai',
+    'Green Curry Chicken',
+    'Tom Yum Goong',
+    'Pad Kra Pao',
+    'Massaman Curry',
+    'Pineapple Fried Rice',
+    'Som Tum Papaya Salad',
+    'Thai Basil Beef'
+  ],
+  Malaysian: [
+    'Nasi Lemak',
+    'Char Kway Teow',
+    'Hainanese Chicken Rice',
+    'Laksa',
+    'Roti Canai',
+    'Nasi Goreng Kampung',
+    'Satay',
+    'Mee Goreng Mamak'
+  ],
+  Indonesian: [
+    'Nasi Goreng',
+    'Rendang Beef',
+    'Ayam Goreng',
+    'Gado-Gado',
+    'Soto Ayam',
+    'Bakso Noodles',
+    'Sate Ayam',
+    'Mie Goreng'
+  ],
+  Vietnamese: [
+    'Pho Bo',
+    'Banh Mi',
+    'Bun Cha',
+    'Com Tam',
+    'Spring Rolls',
+    'Bun Bo Hue',
+    'Grilled Pork Vermicelli',
+    'Ca Kho To'
+  ],
+  Filipino: [
+    'Chicken Adobo',
+    'Sinigang',
+    'Pork Sisig',
+    'Kare-Kare',
+    'Lechon Kawali',
+    'Pancit Canton',
+    'Bicol Express',
+    'Halo-Halo (dessert)'
+  ],
+  Singaporean: [
+    'Hainanese Chicken Rice',
+    'Chilli Crab',
+    'Laksa',
+    'Char Kway Teow',
+    'Bak Kut Teh',
+    'Nasi Lemak',
+    'Hokkien Mee',
+    'Fried Carrot Cake'
+  ],
+  Indian: [
+    'Butter Chicken',
+    'Paneer Tikka Masala',
+    'Chicken Biryani',
+    'Palak Paneer',
+    'Chole Bhature',
+    'Masala Dosa',
+    'Lamb Rogan Josh',
+    'Tandoori Chicken'
+  ],
+  Pakistani: [
+    'Chicken Karahi',
+    'Beef Biryani',
+    'Nihari',
+    'Haleem',
+    'Chapli Kebab',
+    'Chana Chaat',
+    'Seekh Kebabs',
+    'Aloo Paratha'
+  ],
+  'Sri Lankan': [
+    'Rice & Curry',
+    'Kottu Roti',
+    'Lamprais',
+    'Fish Ambul Thiyal',
+    'Hoppers (Appam)',
+    'Dhal Curry',
+    'Pol Sambol',
+    'Devilled Chicken'
+  ],
+  Bangladeshi: [
+    'Kacchi Biryani',
+    'Hilsa Fish Curry',
+    'Beef Bhuna',
+    'Morog Polao',
+    'Panta Bhat',
+    'Fuchka (Puchka)',
+    'Chingri Malai Curry',
+    'Dal & Bhaji Set'
+  ],
+  Nepalese: [
+    'Momos Dumplings',
+    'Dal Bhat',
+    'Choila',
+    'Thukpa Noodle Soup',
+    'Sekuwa Grilled Meat',
+    'Gundruk Soup',
+    'Aloo Tama',
+    'Chatamari'
+  ]
+};
 
 // ==== Theme handling ====
 function applyTheme(mode) {
@@ -50,7 +202,8 @@ function applyTheme(mode) {
   }
 
   if (!saved) {
-    const prefersDark = window.matchMedia &&
+    const prefersDark =
+      window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(prefersDark ? 'dark' : 'light');
   } else {
@@ -66,93 +219,38 @@ if (themeToggle) {
   });
 }
 
-// ==== Image upload & preview ====
-menuImageInput.addEventListener('change', (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+// ==== Random cuisine ("Surprise me") ====
+if (surpriseCuisineBtn) {
+  surpriseCuisineBtn.addEventListener('click', () => {
+    const cuisineKeys = Object.keys(CUISINES);
+    if (cuisineKeys.length === 0) return;
 
-  uploadedImageFile = file;
+    const randomKey =
+      cuisineKeys[Math.floor(Math.random() * cuisineKeys.length)];
 
-  // Show preview
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    menuImagePreview.src = e.target.result;
-    menuImagePreview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-});
-
-// ==== OCR: extract text using Tesseract.js ====
-extractTextBtn.addEventListener('click', () => {
-  if (!uploadedImageFile) {
-    alert('Please upload a menu image first.');
-    return;
-  }
-
-  ocrStatus.textContent = 'Reading text from image... This may take a moment.';
-
-  Tesseract.recognize(uploadedImageFile, 'eng', {
-    logger: (m) => {
-      if (m.status === 'recognizing text') {
-        ocrStatus.textContent = `Recognizing text: ${Math.round(
-          m.progress * 100
-        )}%`;
-      }
-    },
-  })
-    .then(({ data }) => {
-      ocrStatus.textContent = 'Done! Text extracted.';
-      const fullText = data.text;
-      console.log('OCR result:', fullText);
-
-      // Convert OCR text into a list of items (improved parsing)
-      foodItems = parseMenuText(fullText);
-      renderFoodList();
-      drawWheel();
-    })
-    .catch((err) => {
-      console.error(err);
-      ocrStatus.textContent = 'Error reading text from image.';
-    });
-});
-
-// ==== Improved menu text parsing ====
-function parseMenuText(text) {
-  const lines = text
-    .split('\n')
-    .map((line) => line.replace(/\s+/g, ' ').trim())
-    .filter((line) => line.length > 0);
-
-  const items = [];
-
-  for (let line of lines) {
-    // 1) Keep only the part before the price (RM / $ / MYR)
-    const priceMatch = /(.*?)(?:\s*(RM|MYR|\$)\s*\d+(\.\d+)?)/i.exec(line);
-    if (priceMatch) {
-      line = priceMatch[1];
+    if (cuisineSelect) {
+      cuisineSelect.value = randomKey;
+      cuisineSelect.dispatchEvent(new Event('change'));
     }
+  });
+}
 
-    // 2) Remove weird symbols and trailing garbage
-    line = line
-      .replace(/[^a-zA-Z0-9&\-\/\s]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    // 3) Limit to first few words so we don't keep random tail
-    const words = line.split(' ').filter(Boolean);
-    if (words.length > 5) {
-      line = words.slice(0, 5).join(' ');
+// ==== Cuisine selection → load dishes ====
+if (cuisineSelect) {
+  cuisineSelect.addEventListener('change', () => {
+    const value = cuisineSelect.value;
+    if (!value || !CUISINES[value]) {
+      foodItems = [];
+    } else {
+      // shallow copy so user edits don't mutate base data
+      foodItems = [...CUISINES[value]];
     }
-
-    // 4) Filter out too-short / obviously bad lines
-    if (line.length < 3) continue;
-    if (/^\d+(\.\d+)?$/.test(line)) continue; // just numbers
-
-    items.push(line);
-  }
-
-  // 5) Remove duplicates
-  return [...new Set(items)];
+    renderFoodList();
+    drawWheel();
+    resultText.textContent = '';
+    resultText.classList.remove('show');
+    updateMapsLink('');
+  });
 }
 
 // ==== Food list rendering & editing ====
@@ -168,7 +266,7 @@ function renderFoodList() {
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     editButton.addEventListener('click', () => {
-      const newValue = prompt('Edit food item:', foodItems[index]);
+      const newValue = prompt('Edit dish:', foodItems[index]);
       if (newValue === null) return; // cancel
       const trimmed = newValue.trim();
       if (trimmed.length === 0) return;
@@ -215,7 +313,7 @@ newItemInput.addEventListener('keydown', (e) => {
 // ==== Confirm list ====
 confirmListBtn.addEventListener('click', () => {
   if (foodItems.length === 0) {
-    alert('Your list is empty. Add at least one food item.');
+    alert('Your list is empty. Add at least one dish.');
     return;
   }
 
@@ -226,30 +324,21 @@ confirmListBtn.addEventListener('click', () => {
 
 // ==== Reset all ====
 resetBtn.addEventListener('click', () => {
-  // Clear image
-  uploadedImageFile = null;
-  menuImageInput.value = '';
-  menuImagePreview.src = '';
-  menuImagePreview.style.display = 'none';
-
-  // Clear OCR status
-  ocrStatus.textContent = '';
-
-  // Clear items and UI
+  // Clear selection & list
+  if (cuisineSelect) cuisineSelect.value = '';
   foodItems = [];
   renderFoodList();
   clearWheel();
-  currentAngle = 0; // reset angle explicitly here
+  currentAngle = 0;
   resultText.textContent = '';
   resultText.classList.remove('show');
+  updateMapsLink('');
 
-  // Clear saved data
   clearSavedList();
 });
 
 // ==== Wheel drawing ====
 function clearWheel() {
-  // Only clear the pixels, don't touch currentAngle
   ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
 }
 
@@ -265,11 +354,10 @@ function wrapTextTwoLines(label, ctx2, maxWidth) {
   const words = label.split(' ').filter(Boolean);
   if (words.length === 0) return [''];
 
-  // If only 1 word, no wrapping needed
   if (words.length === 1) return [label];
 
   let line1 = words[0];
-  let breakIndex = words.length; // assume everything fits into line1
+  let breakIndex = words.length;
 
   for (let i = 1; i < words.length; i++) {
     const testLine = line1 + ' ' + words[i];
@@ -282,12 +370,35 @@ function wrapTextTwoLines(label, ctx2, maxWidth) {
   }
 
   if (breakIndex === words.length) {
-    // Everything fit into line1
     return [line1];
   } else {
     const line2 = words.slice(breakIndex).join(' ');
     return [line1, line2];
   }
+}
+
+// ==== Google Maps link helper ====
+function updateMapsLink(dishName) {
+  if (!mapsLinkContainer) return;
+
+  mapsLinkContainer.innerHTML = '';
+  if (!dishName) return;
+
+  const cuisinePrefix =
+    cuisineSelect && cuisineSelect.value ? `${cuisineSelect.value} ` : '';
+
+  const query = encodeURIComponent(
+    `${cuisinePrefix}${dishName} restaurant near me`
+  );
+
+  const link = document.createElement('a');
+  link.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.className = 'maps-link';
+  link.textContent = 'Find nearby places on Google Maps';
+
+  mapsLinkContainer.appendChild(link);
 }
 
 function drawWheel() {
@@ -301,7 +412,6 @@ function drawWheel() {
   const centerX = width / 2;
   const centerY = height / 2;
 
-  // Bigger wheel (canvas was increased)
   const radius = Math.min(width, height) / 2 - 70;
   const sliceAngle = (2 * Math.PI) / numItems;
 
@@ -358,7 +468,6 @@ function drawWheel() {
     const startAngle = currentAngle + i * sliceAngle;
     const endAngle = startAngle + sliceAngle;
 
-    // Slice fill
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, startAngle, endAngle);
@@ -366,7 +475,6 @@ function drawWheel() {
     ctx.fillStyle = i % 2 === 0 ? '#d43228' : '#fce9c9';
     ctx.fill();
 
-    // Slice border
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, startAngle, endAngle);
@@ -374,36 +482,28 @@ function drawWheel() {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // ===== Text inside slice (auto-fit with safe margins + ellipsis) =====
-    // 1) Prepare label: shorten overly long ones first
     const rawLabel = foodItems[i];
     const label = shortenLabel(rawLabel);
 
     ctx.save();
     ctx.translate(centerX, centerY);
 
-    // SAFE rotation centered in the slice
     const safeAngle = startAngle + sliceAngle / 2;
     ctx.rotate(safeAngle);
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#5c2313';
 
-    // Text radius: keep it comfortably inside the slice
     const textRadius = radius * 0.5;
-
-    // Max width based on slice geometry (with margin)
     const maxTextWidth =
       textRadius * 2 * Math.sin(sliceAngle / 2) * 0.8;
 
-    // Base font size depends on label length (shorter text = bigger font)
     let baseFontSize = 26;
     if (label.length > 20) baseFontSize = 22;
     if (label.length > 30) baseFontSize = 18;
 
     let fontSize = baseFontSize;
 
-    // Downsize font until BOTH lines fit within maxTextWidth
     while (fontSize > 12) {
       ctx.font = `bold ${fontSize}px Arial`;
 
@@ -421,10 +521,8 @@ function drawWheel() {
     const lineHeight = fontSize + 2;
 
     if (finalLines.length === 1) {
-      // Single line
       ctx.fillText(finalLines[0], textRadius, 5);
     } else {
-      // Two lines: one slightly above, one slightly below
       ctx.fillText(finalLines[0], textRadius, 5 - lineHeight / 2);
       ctx.fillText(finalLines[1], textRadius, 5 + lineHeight / 2);
     }
@@ -481,50 +579,46 @@ function drawWheel() {
 spinBtn.addEventListener('click', () => {
   if (isSpinning) return;
   if (foodItems.length === 0) {
-    alert('Please confirm a list with at least one item first.');
+    alert('Please confirm a list with at least one dish first.');
     return;
   }
 
   isSpinning = true;
   resultText.textContent = '';
   resultText.classList.remove('show');
+  updateMapsLink('');
 
   const numItems = foodItems.length;
   const sliceAngle = (2 * Math.PI) / numItems;
 
-  const startAngle = currentAngle; // fixed starting angle
-  // Random spin between 3 and 6 full rotations
+  const startAngle = currentAngle;
   const randomSpin = (Math.random() * 3 + 3) * 2 * Math.PI;
   const finalAngle = startAngle + randomSpin;
 
-  const duration = 3000; // 3 seconds
+  const duration = 3000;
   const startTime = performance.now();
 
-  // Small "click" / overshoot animation at the end
   function startClickAnimation() {
-    const clickDuration = 180; // ms
+    const clickDuration = 180;
     const clickStartTime = performance.now();
-    const amplitude = sliceAngle * 0.06; // small angle offset
+    const amplitude = sliceAngle * 0.06;
 
     function clickFrame(time) {
       const t = Math.min((time - clickStartTime) / clickDuration, 1);
-      const eased = 1 - Math.pow(1 - t, 2); // ease-out
+      const eased = 1 - Math.pow(1 - t, 2);
 
-      // Start slightly past finalAngle, then settle back
-      const offset = amplitude * (1 - eased); // goes from amplitude -> 0
+      const offset = amplitude * (1 - eased);
       currentAngle = finalAngle + offset;
       drawWheel();
 
       if (t < 1) {
         requestAnimationFrame(clickFrame);
       } else {
-        // Final resting angle
         currentAngle = finalAngle;
         drawWheel();
 
-        // Now decide the winner
         const fullCircle = 2 * Math.PI;
-        const pointerAngle = (3 * Math.PI) / 2; // pointer at top
+        const pointerAngle = (3 * Math.PI) / 2;
 
         let currentNorm = currentAngle % fullCircle;
         if (currentNorm < 0) currentNorm += fullCircle;
@@ -538,6 +632,7 @@ spinBtn.addEventListener('click', () => {
 
         resultText.textContent = `You should eat: ${winningItem}`;
         resultText.classList.add('show');
+        updateMapsLink(winningItem);
         isSpinning = false;
       }
     }
@@ -545,22 +640,18 @@ spinBtn.addEventListener('click', () => {
     requestAnimationFrame(clickFrame);
   }
 
-  // Main spin animation
   function animate(time) {
     const elapsed = time - startTime;
     const progress = Math.min(elapsed / duration, 1);
 
-    // Ease-out (fast then slow)
     const eased = 1 - Math.pow(1 - progress, 3);
 
-    const angle = startAngle + randomSpin * eased;
-    currentAngle = angle;
+    currentAngle = startAngle + randomSpin * eased;
     drawWheel();
 
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      // When main spin ends, do the small click animation
       startClickAnimation();
     }
   }
@@ -588,6 +679,7 @@ function loadSavedFoodItems() {
       drawWheel();
       resultText.textContent = 'Loaded your last confirmed list.';
       resultText.classList.add('show');
+      updateMapsLink('');
     }
   } catch (e) {
     console.warn('Could not load list from localStorage', e);
@@ -604,3 +696,4 @@ function clearSavedList() {
 
 // Load previous list on page load
 loadSavedFoodItems();
+
