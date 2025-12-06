@@ -144,53 +144,57 @@ button:active {
   background: #f3cf66;
 }
 
-/* ===== Upload area ===== */
-.upload-box {
+/* ===== Cuisine selection box ===== */
+.cuisine-box {
   border-radius: 14px;
   background: #faf6ea;
   padding: 16px 16px 18px;
 }
 
-.upload-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: 1px dashed #e0b043;
-  background: #fffaf0;
-  color: #9a7a32;
+.cuisine-label {
+  display: block;
   font-size: 13px;
-  cursor: pointer;
-  margin-bottom: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #7a5a24;
 }
 
-.upload-icon {
-  font-size: 18px;
+.cuisine-select {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background: #ffffff;
 }
 
-/* Hide native file input */
-#menuImageInput {
-  display: none;
+.cuisine-select:focus {
+  outline: none;
+  border-color: #143d6b;
+  box-shadow: 0 0 0 2px rgba(20, 61, 107, 0.15);
 }
 
-.image-preview-wrapper {
-  margin-bottom: 12px;
+/* Row containing select + Surprise button */
+.cuisine-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-#menuImagePreview {
-  max-width: 100%;
-  max-height: 260px;
-  display: none;
-  border-radius: 12px;
-  border: 1px solid #eee;
-  object-fit: contain;
+.cuisine-row .cuisine-select {
+  flex: 1;
 }
 
-.status-text {
-  margin-top: 4px;
-  font-size: 12px;
-  color: #777;
+/* Surprise button tweaks */
+.surprise-btn {
+  white-space: nowrap;
+  font-size: 13px;
+  padding-inline: 12px;
+}
+
+/* Small hint text variant */
+.hint-text.small {
+  font-size: 11px;
 }
 
 /* ===== Food list ===== */
@@ -320,6 +324,38 @@ button:active {
   transform: translateY(0);
 }
 
+/* ===== Google Maps link ===== */
+.maps-link-container {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.maps-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #0f9d58;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.08s ease;
+}
+
+.maps-link:hover {
+  background: #17b465;
+  transform: translateY(-1px);
+}
+
+.maps-link:active {
+  transform: translateY(0);
+}
+
 /* ===== Footer ===== */
 .app-footer {
   text-align: center;
@@ -357,19 +393,19 @@ body.dark-mode .step-label {
   color: #93c5fd;
 }
 
-body.dark-mode .upload-box {
+body.dark-mode .cuisine-box {
   background: #020617;
   border: 1px solid #111827;
 }
 
-body.dark-mode .upload-label {
+body.dark-mode .cuisine-select {
   background: #020617;
-  border-color: #fbbf24;
-  color: #facc6b;
+  color: #e5e7eb;
+  border-color: #111827;
 }
 
-body.dark-mode .status-text {
-  color: #9ca3af;
+body.dark-mode .cuisine-label {
+  color: #facc6b;
 }
 
 body.dark-mode .food-list {
@@ -436,6 +472,16 @@ body.dark-mode .app-footer {
   color: #6b7280;
 }
 
+/* Dark mode for Maps button */
+body.dark-mode .maps-link {
+  background: #22c55e;
+  color: #022c22;
+}
+
+body.dark-mode .maps-link:hover {
+  background: #4ade80;
+}
+
 /* Theme toggle label colors in dark mode */
 body.dark-mode .theme-toggle {
   border-color: #374151;
@@ -468,4 +514,34 @@ body.dark-mode .theme-toggle {
   .food-list {
     max-height: 220px;
   }
+
+  .cuisine-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .surprise-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ===== Leaflet Map (NEW) ===== */
+
+#mapContainer {
+  margin-top: 14px;
+  display: none;
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .leaflet-map {
+  border: 1px solid #1e293b;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
 }
